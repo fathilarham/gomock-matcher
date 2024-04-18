@@ -16,14 +16,14 @@ func Test_StructMatcher(t *testing.T) {
 		}
 
 		var testStruct someStruct
-		testStruct.Name = "Fathil"
+		testStruct.Name = "John"
 		testStruct.Age = 30
 		testStruct.CreatedOn = time.Now()
 
-		s := StructMatcher(testStruct).Fields([]string{"Name", "Age"})
+		s := New(testStruct).Include([]string{"Name", "Age"})
 
 		assert.True(t, s.Matches(someStruct{
-			Name:      "Fathil",
+			Name:      "John",
 			Age:       30,
 			CreatedOn: time.Now(),
 		}))
@@ -43,16 +43,16 @@ func Test_StructMatcher(t *testing.T) {
 		}
 
 		var testStruct someStruct
-		testStruct.Name = "Fathil"
+		testStruct.Name = "John"
 		testStruct.Age = 30
 		testStruct.CreatedOn = time.Now()
 		testStruct.Child.Name = "Arham"
 		testStruct.Child.Age = 10
 
-		s := StructMatcher(testStruct).Fields([]string{"Name", "Child.Name"})
+		s := New(testStruct).Include([]string{"Name", "Child.Name"})
 
 		assert.True(t, s.Matches(someStruct{
-			Name:      "Fathil",
+			Name:      "John",
 			Age:       30,
 			CreatedOn: time.Now(),
 			Child: childStruct{
