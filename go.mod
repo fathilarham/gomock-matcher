@@ -1,4 +1,4 @@
-module gomock-matcher
+module github.com/fathilarham/gomock-matcher
 
 go 1.20
 
