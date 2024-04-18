@@ -7,8 +7,10 @@ import (
 )
 
 type structMatcher struct {
-	fields map[string]bool
-	s      any
+	fields   map[string]bool
+	s        any
+	hasError bool
+	option   Option
 }
 
 func (s structMatcher) Matches(x interface{}) bool {
@@ -25,12 +27,15 @@ func (s structMatcher) Matches(x interface{}) bool {
 		}
 
 		if !reflect.DeepEqual(expectedValue, actualValue) {
-			return false
-		}
+			if s.option.BailError {
+				return false
+			}
 
+			s.hasError = true
+		}
 	}
 
-	return true
+	return !s.hasError
 }
 
 func (s structMatcher) String() string {
@@ -46,7 +51,7 @@ func (s structMatcher) Fields(fields []string) structMatcher {
 	return s
 }
 
-func StructMatcher(s any) structMatcher {
+func New(s any) structMatcher {
 	return structMatcher{
 		fields: make(map[string]bool),
 		s:      s,
